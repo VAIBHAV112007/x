@@ -10,11 +10,31 @@ from preprocessing import preprocess_sonar_image
 from georeference import calculate_anomaly_gps
 from sonar_detector import detect_sonar_anomalies
 
-app = FastAPI(title="SagarDhristi — Hybrid Sonar Detection API")
+import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI(title="SagarDrishti — Hybrid Sonar Detection API")
+
+# Define fallback origins for local development
+allowed_origins = [
+    "https://sagardrishti-ai.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# Read the live Vercel URL from Render's environment variable
+frontend_env = os.getenv("VITE_APP_FRONTEND")
+if frontend_env:
+    allowed_origins.append(frontend_env.rstrip("/"))
+
+# Keep this middleware block active
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
