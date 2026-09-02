@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text, Float, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
-import { ShieldAlert, X, Navigation, Radar, AlignCenter, Droplets, Target } from 'lucide-react';
+import { ShieldAlert, X, Navigation, Radar, AlignCenter, Droplets, Target, Activity, Eye, Maximize } from 'lucide-react';
 
 function seededRandom(seed) {
   const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
@@ -401,6 +401,27 @@ export default function Seabed3DView({ detections = [] }) {
               <div className="flex flex-col gap-1 bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
                 <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex items-center gap-1.5"><Target className="w-3.5 h-3.5 text-slate-400" /> Acoustic Shadow</span>
                 <span className="text-sm font-bold text-slate-700">{activeHazard.shadow_length_m || 3.1}m</span>
+              </div>
+              
+              {/* USP: Physical Dimensions & Visibility */}
+              <div className="flex flex-col gap-1 bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
+                <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex items-center gap-1.5"><Maximize className="w-3.5 h-3.5 text-slate-400" /> Dimensions (LxB)</span>
+                <span className="text-sm font-bold text-slate-700">{activeHazard.estimated_length_m || 2.5}m × {activeHazard.estimated_breadth_m || 1.2}m</span>
+              </div>
+              <div className="flex flex-col gap-1 bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
+                <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex items-center gap-1.5"><Eye className="w-3.5 h-3.5 text-slate-400" /> Visibility</span>
+                <span className="text-sm font-bold text-slate-700">{activeHazard.visibility_status || 'Clear'} ({activeHazard.visibility_score || 95}%)</span>
+              </div>
+              
+              {/* USP: Acoustic Material Classification */}
+              <div className="col-span-2 flex flex-col gap-1 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-3 shadow-md mt-1">
+                <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-cyan-400" /> Acoustic Material Signature
+                </span>
+                <div className="flex justify-between items-end mt-1">
+                  <span className="text-sm font-black text-white">{activeHazard.material_class || 'Unknown'}</span>
+                  <span className="text-xs font-bold text-cyan-300">Ref: {activeHazard.acoustic_reflectance || '0.0'}</span>
+                </div>
               </div>
             </div>
 

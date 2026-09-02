@@ -172,16 +172,16 @@ export function generateSonarPdfReport({
     const tableRows = safeDetections.map((d, index) => [
       `#${index + 1}`,
       d.class || 'Submerged Debris',
-      `${Math.round((d.confidence || 0.88) * 100)}%`,
+      `${Math.round((d.confidence || 0.88) * 100)}% (${d.visibility_status || 'Clear'})`,
       d.channel || 'Starboard Channel',
       `${d.slantRange || '14.5'} m`,
       `${(d.lat || safeLat).toFixed(4)}° N, ${(d.lon || safeLon).toFixed(4)}° W`,
-      '15.0 m Standoff',
+      `${d.material || 'Unknown'} (Ref: ${d.reflectance || '0.0'})`,
     ]);
 
     runAutoTable({
       startY: currentY + 3,
-      head: [['ID', 'Hazard Class', 'Confidence', 'Acoustic Swath', 'Slant Offset', 'Target GPS', 'Safety Zone']],
+      head: [['ID', 'Hazard Class', 'Confidence', 'Acoustic Swath', 'Slant Offset', 'Target GPS', 'Material Signature']],
       body: tableRows,
       theme: 'striped',
       headStyles: {

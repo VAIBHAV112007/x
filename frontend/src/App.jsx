@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import MissionsGIS from './pages/MissionsGIS';
 import HazardReports from './pages/HazardReports';
 import Auth from './pages/Auth';
+import DriftPrediction from './pages/DriftPrediction';
 import { MissionProvider } from './context/MissionContext'; // <-- NEW IMPORT
 
 export default function App() {
@@ -89,6 +90,7 @@ export default function App() {
           <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-50">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/drift" element={<DriftPrediction />} />
               <Route path="/missions" element={<MissionsGIS />} />
               <Route path="/reports" element={<HazardReports />} />
             </Routes>

@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Compass, Radio, FileText, Activity, Server } from 'lucide-react';
+import { LayoutDashboard, Compass, Radio, FileText, Activity, Server, Wind } from 'lucide-react';
 
 export default function Navigation() {
   const navItems = [
     { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/drift', label: 'Drift Prediction', icon: Wind },
     { to: '/missions', label: 'Bathymetry', icon: Compass },
     { to: '/reports', label: 'Inspection Reports', icon: FileText },
   ];

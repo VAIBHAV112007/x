@@ -165,27 +165,79 @@ export default function Home() {
               const w = res.data.image_meta?.width || 640;
               const h = res.data.image_meta?.height || 480;
               
+              let fakeMaterial = "Unknown";
+              let fakeReflectance = 0;
+              if (forceClass === 'Metal Box' || forceClass === 'Anchor' || forceClass === 'Shipwreck' || forceClass === 'Underwater Pipe' || forceClass === 'Submarine') { 
+                  fakeMaterial = 'Metal'; 
+                  fakeReflectance = (180 + Math.random()*50).toFixed(1); 
+              } else if (forceClass === 'Tire' || forceClass === 'Tyre') { 
+                  fakeMaterial = 'Rubber'; 
+                  fakeReflectance = (130 + Math.random()*30).toFixed(1); 
+              } else if (forceClass === 'Glass Jar') { 
+                  fakeMaterial = 'Glass'; 
+                  fakeReflectance = (140 + Math.random()*20).toFixed(1); 
+              } else if (forceClass === 'Ghost Fishing Net') { 
+                  fakeMaterial = 'Nylon/Synthetic'; 
+                  fakeReflectance = (110 + Math.random()*20).toFixed(1); 
+              } else { 
+                  fakeMaterial = 'Plastic/Organic'; 
+                  fakeReflectance = (90 + Math.random()*30).toFixed(1); 
+              }
+              
               parsedDetections = [{
                 id: `hazard-0`,
                 bbox: [w * 0.35, h * 0.35, w * 0.65, h * 0.65], // Center perfectly based on image size
                 classification: forceClass,
                 confidence: parseFloat(conf),
+                material_class: fakeMaterial,
+                acoustic_reflectance: parseFloat(fakeReflectance),
+                generalized_class: "Medium Compact Anomaly",
+                visibility_score: 92.5,
+                visibility_status: "Clear",
+                estimated_breadth_m: 2.5,
                 channel: Math.random() > 0.5 ? "Port" : "Starboard",
                 slant_range_m: parseFloat(depth),
                 gps: { lat: 18.9220 + latOffset, lon: 72.8347 + lonOffset },
                 three_pos: [Math.random() * 4 - 2, 2.5, Math.random() * 4 - 2]
               }];
             } else {
-              parsedDetections = parsedDetections.map((d, idx) => ({
-                ...d,
-                classification: forceClass,
-                confidence: parseFloat(conf) + (idx * 0.1),
-                slant_range_m: parseFloat(depth) + (idx * 1.5),
-                gps: { 
-                  lat: (d.gps?.lat || 18.9220) + latOffset, 
-                  lon: (d.gps?.lon || 72.8347) + lonOffset 
+              parsedDetections = parsedDetections.map((d, idx) => {
+                let fakeMaterial = d.material_class || 'Unknown';
+                let fakeReflectance = d.acoustic_reflectance || 0;
+                
+                if (forceClass) {
+                  if (forceClass === 'Metal Box' || forceClass === 'Anchor' || forceClass === 'Shipwreck' || forceClass === 'Underwater Pipe' || forceClass === 'Submarine') { 
+                      fakeMaterial = 'Metal'; 
+                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (180 + Math.random()*50).toFixed(1); 
+                  } else if (forceClass === 'Tire' || forceClass === 'Tyre') { 
+                      fakeMaterial = 'Rubber'; 
+                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (130 + Math.random()*30).toFixed(1); 
+                  } else if (forceClass === 'Glass Jar') { 
+                      fakeMaterial = 'Glass'; 
+                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (140 + Math.random()*20).toFixed(1); 
+                  } else if (forceClass === 'Ghost Fishing Net') { 
+                      fakeMaterial = 'Nylon/Synthetic'; 
+                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (110 + Math.random()*20).toFixed(1); 
+                  }
                 }
-              }));
+                
+                return {
+                  ...d,
+                  classification: forceClass,
+                  confidence: parseFloat(conf) + (idx * 0.1),
+                  material_class: fakeMaterial,
+                  acoustic_reflectance: parseFloat(fakeReflectance),
+                  generalized_class: d.generalized_class || "Medium Compact Anomaly",
+                  visibility_score: d.visibility_score || 92.5,
+                  visibility_status: d.visibility_status || "Clear",
+                  estimated_breadth_m: d.estimated_breadth_m || 2.5,
+                  slant_range_m: parseFloat(depth) + (idx * 1.5),
+                  gps: { 
+                    lat: (d.gps?.lat || 18.9220) + latOffset, 
+                    lon: (d.gps?.lon || 72.8347) + lonOffset 
+                  }
+                };
+              });
             }
           }
         }
@@ -239,6 +291,9 @@ export default function Home() {
       slantRange: d.slant_range_m,
       lat: d.gps?.lat || 18.9220,
       lon: d.gps?.lon || 72.8347,
+      material: d.material_class || 'Unknown',
+      reflectance: d.acoustic_reflectance || 0.0,
+      visibility_status: d.visibility_status || 'Clear'
     }));
 
     generateSonarPdfReport({
@@ -467,6 +522,16 @@ export default function Home() {
                       <div className="flex justify-between text-xs text-slate-500">
                         <span>Confidence: <span className="font-semibold text-slate-700">{d.confidence}%</span></span>
                         <span>Depth: <span className="font-semibold text-slate-700">{d.slant_range_m || '15'}m</span></span>
+                      </div>
+                      <div className="flex justify-between text-[11px] text-slate-500 mt-1">
+                        <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                          <span className="text-slate-400 mr-1">Material:</span>
+                          <span className="font-bold text-slate-700">{d.material_class || 'Unknown'}</span>
+                        </span>
+                        <span className="bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                          <span className="text-slate-400 mr-1">Reflectance:</span>
+                          <span className="font-bold text-slate-700">{d.acoustic_reflectance || '0.0'}</span>
+                        </span>
                       </div>
                     </div>
                   );
