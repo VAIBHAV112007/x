@@ -1,0 +1,4 @@
+Engine: Precise Lagrangian Shoreline Simulator
+Grounding Info: {'grounded': True, 'grounded_day': 0, 'seashore_name': 'A Ward Waterfront / Coastal Bank', 'landing_type': 'Seashore / Riverbank', 'grounded_lat': 18.922, 'grounded_lon': 72.8347, 'total_distance_km': 0.0}
+Trajectory Points Count: 1
+Day 0: lat=18.922, lon=72.8347, status=Grounded at Seashore (Origin on Land)
