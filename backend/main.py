@@ -15,6 +15,10 @@ import os
 
 app = FastAPI(title="SagarDrishti — Hybrid Sonar Detection API")
 
+@app.get("/healthz")
+def healthz():
+    return{"status":"OK"}
+
 # Define fallback origins for local development
 allowed_origins = [
     "https://sagar-drishti-e.vercel.app",
@@ -441,10 +445,6 @@ async def detect_anomalies(
                 "detections": []
             }
         )
-
-@app.get("/healthz")
-def healthz():
-    return{"status":"OK"}
 
 class DriftRequest(BaseModel):
     lat: float
