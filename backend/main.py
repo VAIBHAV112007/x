@@ -17,7 +17,7 @@ app = FastAPI(title="SagarDrishti — Hybrid Sonar Detection API")
 
 # Define fallback origins for local development
 allowed_origins = [
-    "https://sagardrishti-ai.vercel.app",
+    "https://sagar-drishti-e.vercel.app",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",

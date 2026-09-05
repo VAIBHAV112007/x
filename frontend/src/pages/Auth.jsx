@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function Auth({ onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
-  
+
   // Form States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +15,7 @@ export default function Auth({ onAuthSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // PROTOTYPE BYPASS: Directly pass authentication
     if (isLogin) {
       onAuthSuccess({ email: email || 'demo@organization.gov', orgName: 'Demo Organization' });
@@ -30,7 +30,7 @@ export default function Auth({ onAuthSuccess }) {
 
     try {
       if (isLogin) {
-        const res = await axios.post('http://127.0.0.1:5000/api/login', {
+        const res = await axios.post('https://x-u3ku.onrender.com/api/login', {
           email,
           password
         });
@@ -38,7 +38,7 @@ export default function Auth({ onAuthSuccess }) {
           onAuthSuccess(res.data.user);
         }
       } else {
-        const res = await axios.post('http://127.0.0.1:5000/api/register', {
+        const res = await axios.post('https://x-u3ku.onrender.com/api/register', {
           email,
           password,
           orgName,
@@ -63,7 +63,7 @@ export default function Auth({ onAuthSuccess }) {
   return (
     <div className="flex h-screen w-screen bg-slate-50 items-center justify-center font-sans">
       <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl shadow-slate-200/50 p-8 m-4">
-        
+
         {/* Header */}
         <div className="flex flex-col items-center gap-4 mb-8">
           <div className="p-2 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100">
@@ -81,14 +81,14 @@ export default function Auth({ onAuthSuccess }) {
 
         {/* Toggle between Login and Register */}
         <div className="flex bg-slate-100 p-1 rounded-xl mb-6">
-          <button 
+          <button
             className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${isLogin ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             onClick={() => setIsLogin(true)}
             type="button"
           >
             Sign In
           </button>
-          <button 
+          <button
             className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${!isLogin ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             onClick={() => setIsLogin(false)}
             type="button"
@@ -98,7 +98,7 @@ export default function Auth({ onAuthSuccess }) {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          
+
           {errorMsg && (
             <div className="flex items-center gap-2 p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-200">
               <AlertCircle className="w-4 h-4 shrink-0" />
@@ -114,9 +114,9 @@ export default function Auth({ onAuthSuccess }) {
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Building2 className="h-4 w-4 text-slate-400" />
                   </div>
-                  <input 
-                    type="text" 
-                    required 
+                  <input
+                    type="text"
+                    required
                     value={orgName}
                     onChange={(e) => setOrgName(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
@@ -127,7 +127,7 @@ export default function Auth({ onAuthSuccess }) {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Organization Type</label>
-                <select 
+                <select
                   value={orgType}
                   onChange={(e) => setOrgType(e.target.value)}
                   className="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
@@ -147,9 +147,9 @@ export default function Auth({ onAuthSuccess }) {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="h-4 w-4 text-slate-400" />
               </div>
-              <input 
-                type="email" 
-                required 
+              <input
+                type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
@@ -164,9 +164,9 @@ export default function Auth({ onAuthSuccess }) {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-4 w-4 text-slate-400" />
               </div>
-              <input 
-                type="password" 
-                required 
+              <input
+                type="password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
@@ -175,7 +175,7 @@ export default function Auth({ onAuthSuccess }) {
             </div>
           </div>
 
-          <button 
+          <button
             type="button"
             onClick={handleSubmit}
             disabled={loading}
@@ -190,7 +190,7 @@ export default function Auth({ onAuthSuccess }) {
             )}
           </button>
         </form>
-        
+
         {isLogin && (
           <div className="mt-6 text-center">
             <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">

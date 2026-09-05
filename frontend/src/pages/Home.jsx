@@ -1,11 +1,11 @@
 import React, { useState, useRef, useContext } from 'react';
 import axios from 'axios';
-import { 
-  Activity, 
-  Map, 
-  AlertTriangle, 
-  Radio, 
-  Upload, 
+import {
+  Activity,
+  Map,
+  AlertTriangle,
+  Radio,
+  Upload,
   Settings,
   FileText,
   Search,
@@ -31,7 +31,7 @@ export default function Home() {
   const [manualClasses, setManualClasses] = useState('debris, submarine, tyre, metal, anchor, shipwreck');
 
   const fileInputRef = useRef(null);
-  const API_BASE = 'http://127.0.0.1:5000';
+  const API_BASE = 'https://x-u3ku.onrender.com';
 
   const defaultAutoClasses = 'debris, submarine, tyres, metals, anchors, shipwrecks, fish, living plants, animals';
   const highPriorityKeywords = ['debris', 'submarine', 'tyre', 'tyres', 'metal', 'metals', 'anchor', 'anchors', 'shipwreck', 'shipwrecks'];
@@ -134,7 +134,7 @@ export default function Home() {
         if (selectedFile && selectedFile.name) {
           const lowerName = selectedFile.name.toLowerCase();
           let forceClass = null;
-          
+
           if (lowerName.includes('metal')) forceClass = 'Metal Box';
           else if (lowerName.includes('submarine')) forceClass = 'Submarine';
           else if (lowerName.includes('debris')) forceClass = 'Debris';
@@ -153,7 +153,7 @@ export default function Home() {
             else if (forceClass === 'Shipwreck') { baseDepth = 70.0; baseConf = 98.0; }
             else if (forceClass === 'Debris' || forceClass === 'Glass Jar') { baseDepth = 12.0; baseConf = 89.0; }
             else if (forceClass === 'Metal Box') { baseDepth = 35.0; baseConf = 94.0; }
-            
+
             // Add randomness so it looks real on every click
             const depth = (baseDepth + (Math.random() * 5 - 2.5)).toFixed(1);
             const conf = (baseConf + (Math.random() * 3.5)).toFixed(1);
@@ -164,26 +164,26 @@ export default function Home() {
               // INJECT A GUARANTEED DETECTION FOR THE DEMO IF AI FAILED TO FIND ANYTHING
               const w = res.data.image_meta?.width || 640;
               const h = res.data.image_meta?.height || 480;
-              
+
               let fakeMaterial = "Unknown";
               let fakeReflectance = 0;
-              if (forceClass === 'Metal Box' || forceClass === 'Anchor' || forceClass === 'Shipwreck' || forceClass === 'Underwater Pipe' || forceClass === 'Submarine') { 
-                  fakeMaterial = 'Metal'; 
-                  fakeReflectance = (180 + Math.random()*50).toFixed(1); 
-              } else if (forceClass === 'Tire' || forceClass === 'Tyre') { 
-                  fakeMaterial = 'Rubber'; 
-                  fakeReflectance = (130 + Math.random()*30).toFixed(1); 
-              } else if (forceClass === 'Glass Jar') { 
-                  fakeMaterial = 'Glass'; 
-                  fakeReflectance = (140 + Math.random()*20).toFixed(1); 
-              } else if (forceClass === 'Ghost Fishing Net') { 
-                  fakeMaterial = 'Nylon/Synthetic'; 
-                  fakeReflectance = (110 + Math.random()*20).toFixed(1); 
-              } else { 
-                  fakeMaterial = 'Plastic/Organic'; 
-                  fakeReflectance = (90 + Math.random()*30).toFixed(1); 
+              if (forceClass === 'Metal Box' || forceClass === 'Anchor' || forceClass === 'Shipwreck' || forceClass === 'Underwater Pipe' || forceClass === 'Submarine') {
+                fakeMaterial = 'Metal';
+                fakeReflectance = (180 + Math.random() * 50).toFixed(1);
+              } else if (forceClass === 'Tire' || forceClass === 'Tyre') {
+                fakeMaterial = 'Rubber';
+                fakeReflectance = (130 + Math.random() * 30).toFixed(1);
+              } else if (forceClass === 'Glass Jar') {
+                fakeMaterial = 'Glass';
+                fakeReflectance = (140 + Math.random() * 20).toFixed(1);
+              } else if (forceClass === 'Ghost Fishing Net') {
+                fakeMaterial = 'Nylon/Synthetic';
+                fakeReflectance = (110 + Math.random() * 20).toFixed(1);
+              } else {
+                fakeMaterial = 'Plastic/Organic';
+                fakeReflectance = (90 + Math.random() * 30).toFixed(1);
               }
-              
+
               parsedDetections = [{
                 id: `hazard-0`,
                 bbox: [w * 0.35, h * 0.35, w * 0.65, h * 0.65], // Center perfectly based on image size
@@ -204,23 +204,23 @@ export default function Home() {
               parsedDetections = parsedDetections.map((d, idx) => {
                 let fakeMaterial = d.material_class || 'Unknown';
                 let fakeReflectance = d.acoustic_reflectance || 0;
-                
+
                 if (forceClass) {
-                  if (forceClass === 'Metal Box' || forceClass === 'Anchor' || forceClass === 'Shipwreck' || forceClass === 'Underwater Pipe' || forceClass === 'Submarine') { 
-                      fakeMaterial = 'Metal'; 
-                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (180 + Math.random()*50).toFixed(1); 
-                  } else if (forceClass === 'Tire' || forceClass === 'Tyre') { 
-                      fakeMaterial = 'Rubber'; 
-                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (130 + Math.random()*30).toFixed(1); 
-                  } else if (forceClass === 'Glass Jar') { 
-                      fakeMaterial = 'Glass'; 
-                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (140 + Math.random()*20).toFixed(1); 
-                  } else if (forceClass === 'Ghost Fishing Net') { 
-                      fakeMaterial = 'Nylon/Synthetic'; 
-                      fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (110 + Math.random()*20).toFixed(1); 
+                  if (forceClass === 'Metal Box' || forceClass === 'Anchor' || forceClass === 'Shipwreck' || forceClass === 'Underwater Pipe' || forceClass === 'Submarine') {
+                    fakeMaterial = 'Metal';
+                    fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (180 + Math.random() * 50).toFixed(1);
+                  } else if (forceClass === 'Tire' || forceClass === 'Tyre') {
+                    fakeMaterial = 'Rubber';
+                    fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (130 + Math.random() * 30).toFixed(1);
+                  } else if (forceClass === 'Glass Jar') {
+                    fakeMaterial = 'Glass';
+                    fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (140 + Math.random() * 20).toFixed(1);
+                  } else if (forceClass === 'Ghost Fishing Net') {
+                    fakeMaterial = 'Nylon/Synthetic';
+                    fakeReflectance = fakeReflectance > 0 ? fakeReflectance : (110 + Math.random() * 20).toFixed(1);
                   }
                 }
-                
+
                 return {
                   ...d,
                   classification: forceClass,
@@ -232,9 +232,9 @@ export default function Home() {
                   visibility_status: d.visibility_status || "Clear",
                   estimated_breadth_m: d.estimated_breadth_m || 2.5,
                   slant_range_m: parseFloat(depth) + (idx * 1.5),
-                  gps: { 
-                    lat: (d.gps?.lat || 18.9220) + latOffset, 
-                    lon: (d.gps?.lon || 72.8347) + lonOffset 
+                  gps: {
+                    lat: (d.gps?.lat || 18.9220) + latOffset,
+                    lon: (d.gps?.lon || 72.8347) + lonOffset
                   }
                 };
               });
@@ -267,7 +267,7 @@ export default function Home() {
     // Capture 3D Canvas
     const canvasElement = document.querySelector('canvas');
     if (canvasElement && typeof canvasElement.toDataURL === 'function') {
-      try { canvasDataUrl = canvasElement.toDataURL('image/png'); } catch (e) {}
+      try { canvasDataUrl = canvasElement.toDataURL('image/png'); } catch (e) { }
     }
 
     // Capture 2D Input (if preview exists, convert selectedFile to base64 via a FileReader)
@@ -314,7 +314,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-6 w-full font-sans pb-10">
-      
+
       {/* Header */}
       <header className="flex flex-wrap justify-between items-center bg-white border border-slate-200 p-5 rounded-xl shadow-sm gap-4">
         <div>
@@ -360,7 +360,7 @@ export default function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Main Visualization Area */}
         <div className="lg:col-span-8 flex flex-col gap-6">
-          
+
           {/* Top Drag & Drop File Zone */}
           <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm flex flex-col gap-4">
             <div className="flex justify-between items-center mb-2">
@@ -368,11 +368,10 @@ export default function Home() {
                 <Scan className="w-4 h-4 text-blue-600" /> Sonar Target Configuration
               </h2>
             </div>
-            
-            <div 
-              className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-colors cursor-pointer ${
-                isDragOver ? 'border-blue-500 bg-blue-50' : 'border-slate-300 bg-slate-50 hover:border-slate-400'
-              }`}
+
+            <div
+              className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center transition-colors cursor-pointer ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-slate-300 bg-slate-50 hover:border-slate-400'
+                }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -381,17 +380,17 @@ export default function Home() {
               <Upload className="w-6 h-6 text-slate-500 mb-2" />
               <p className="text-sm font-bold text-slate-700">Drag & Drop Sonar Imagery Here</p>
               <p className="text-xs text-slate-500">Supports .png, .jpg, .tiff, .tif</p>
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleFileChange} 
-                className="hidden" 
-                accept="image/*, .tiff, .tif" 
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                accept="image/*, .tiff, .tif"
               />
               {selectedFile && (
                 <div className="mt-3 px-3 py-1 bg-white border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-md shadow-sm flex items-center justify-between gap-4 z-10" onClick={(e) => e.stopPropagation()}>
                   <span>Selected: {selectedFile.name}</span>
-                  <button 
+                  <button
                     onClick={handleClearImage}
                     className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full px-2 py-0.5 font-bold transition-colors"
                     title="Remove Image"
@@ -422,8 +421,8 @@ export default function Home() {
               {detectionMode === 'manual' && (
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-600">Custom Target Classes (Comma-separated)</label>
-                  <textarea 
-                    rows={2} 
+                  <textarea
+                    rows={2}
                     value={manualClasses}
                     onChange={(e) => setManualClasses(e.target.value)}
                     className="border border-slate-300 rounded-md p-2 text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -439,14 +438,14 @@ export default function Home() {
               </div>
             )}
 
-            <button 
+            <button
               onClick={handleRunPipeline}
               disabled={!selectedFile || loading}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold flex items-center justify-center py-2.5 rounded-lg shadow-sm transition"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <svg className="animate-spin w-4 h-4 text-white" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  <svg className="animate-spin w-4 h-4 text-white" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                   Processing Targets...
                 </span>
               ) : (
@@ -494,12 +493,12 @@ export default function Home() {
             </div>
 
           </div>
-          
+
         </div>
-        
+
         {/* Right Side Panels */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          
+
           {/* Recent Detections Grid */}
           <div className="bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col">
             <div className="p-4 border-b border-slate-200">
@@ -586,7 +585,7 @@ export default function Home() {
 
         </div>
       </div>
-      
+
       {/* Wide 3D Bathymetry mapped to full width border below the dashboard elements */}
       <div className="w-full relative shadow-sm border-t border-slate-200 border-b bg-slate-900" style={{ height: '700px' }}>
         <div className="absolute top-4 left-4 z-10 pointers-events-none">
