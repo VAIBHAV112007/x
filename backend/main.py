@@ -442,6 +442,10 @@ async def detect_anomalies(
             }
         )
 
+@app.get("/healthz")
+def healthz():
+    return{"status":"OK"}
+
 class DriftRequest(BaseModel):
     lat: float
     lon: float
